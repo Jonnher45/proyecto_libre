@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+    {% load static %}
+    {% block contenido %}    
+
+    <h1>Juego del Ahorcado</h1>    
+    {% block game %}    
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dificultadDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                Seleccionar Dificultad
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dificultadDropdown">                
+                {% for level in levels %}
+                    <li><a class="dropdown-item" href="{% url 'game' id=level.id %}">{{level.name}} </a></li>                    
+                {% endfor %}                
+            </ul>
+        </div>
+        <hr>
+        <h3>Historial de Juegos</h3>
+        <div class="card" style="width: 50rem;">
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nivel de la palabra</th>
+                    <th scope="col">Intentos Restantes</th>
+                    <th scope="col">Es Correcta</th>
+                  </tr>
+                </thead>
+                <tbody> 
+                    {% for attemp in attemps %}
+                    <tr>
+                        <th scope="row">{{attemp.id}}</th>
+                        <td>{{attemp.word.level.name}}</td>
+                        <td>{{attemp.attemps}}/6</td>                          
+                        <td>{% if attemp.is_correct == 1 %}
+                            Si
+                            {% else %}
+                            No
+                            {% endif %}
+                        </td>                        
+                    </tr>
+                    {% endfor %}                         
+                  
+                    
+                  
+                </tbody>
+              </table>
+            <ul class="list-group list-group-flush">
+                      
+            </ul>
+          </div>
+    {% endblock game %}
+
+{% endblock contenido %}

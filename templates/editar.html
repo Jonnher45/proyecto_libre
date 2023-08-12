@@ -1,0 +1,40 @@
+{% extends 'home.html' %}
+
+{% block contenido %}
+<div class="container">
+    <div class="row align-items-start">
+      <div class="col">
+        <form action="{% url 'editarPalabra' %}" method="POST">
+            {% csrf_token %}       
+            <h3><strong>Edición de Palabra</strong></h3>      
+            <div class="form-group pb-2">
+                <label for="txtCodigo" class="mb-1">Ingrese una palabra:</label>
+                <input type="text" id="txtCodigo" name="txtCodigo"  class="form-control" value="{{palabra.id}}" maxlength="50" required readonly>
+            </div>
+            <div class="form-group pb-2">
+                <label for="txtAnswer" class="mb-1">Ingrese una palabra:</label>
+                <input type="text" id="txtAnswer" name="txtAnswer"  class="form-control" value="{{palabra.answer}}" maxlength="50" required>
+            </div>
+            <div class="form-group pb-2">
+                <label for="txtWord" class="mb-1">Ingrese una pista:</label>
+                <input type="text" id="txtWord" name="txtWord" class="form-control" value="{{palabra.word}}" maxlength="50" required>
+            </div>            
+            {{palabra.level.id}}
+            <label for="flexRadioDefault"><strong>Seleccione la dificultad</strong></label>
+            {% for nivel in niveles %}
+                <div class="form-check ml-5">
+                    <input class="form-check-input"  type="radio" name="flexRadioDefault" id="flexRadioDefault{{nivel.id}}" value="{{nivel.id}}" required {% if nivel.id == palabra.level.id %} checked {% endif %}>
+                    
+                    <label class="form-check-label" for="flexRadioDefault{{nivel.id}}">
+                        {{nivel.name}} 
+                    </label>
+                </div>                                  
+            {% endfor %}                                      
+            <div class="form-group">
+                <button type="submit" class="btn btn-success btn-block text-white">Guardar</button>
+            </div>
+        </form>
+      </div>      
+    </div>
+  </div>
+{% endblock contenido %}

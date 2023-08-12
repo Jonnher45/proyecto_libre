@@ -1,57 +1,71 @@
 {% extends 'home.html' %}
 {% load static %}
 {% block contenido %}
-    <p id="palabra" data-palabra="{{ word.answer }}">Pista: {{ word.word }}</p>
-    <p id="palabra-respuesta"></p>
-    <p>Intentos restantes: <span id="intentos">6</span></p>
-    
-    <card id="keyboard" >
-        <div class="container p-4 mb-3">
-            <button class="key btn btn-primary " id="a">A</button>
-            <button class="key btn btn-primary ms-2" id="b">B</button>
-            <button class="key btn btn-primary" id="c">C</button>
-            <button class="key btn btn-primary" id="d">D</button>
-            <button class="key btn btn-primary" id="e">E</button>
-            <button class="key btn btn-primary" id="f">F</button>
-            <button class="key btn btn-primary" id="g">G</button>
-            <button class="key btn btn-primary" id="h">H</button>
-            <button class="key btn btn-primary" id="i">I</button>
-        </div>
-        <div class="p-4">
-            <button class="key btn btn-primary" id="j">J</button>
-            <button class="key btn btn-primary" id="k">K</button>
-            <button class="key btn btn-primary" id="l">L</button>
-            <button class="key btn btn-primary" id="m">M</button>
-            <button class="key btn btn-primary" id="n">N</button>
-            <button class="key btn btn-primary" id="ñ">Ñ</button>
-            <button class="key btn btn-primary" id="o">O</button>
-            <button class="key btn btn-primary" id="p">P</button>
-            <button class="key btn btn-primary" id="q">Q</button>
-            <button class="key btn btn-primary" id="r">R</button>
-            <button class="key btn btn-primary" id="s">S</button>
-            <button class="key btn btn-primary" id="t">T</button>
-        </div>
-        <div class="p-4">
-            <button class="key btn btn-primary" id="u">U</button>
-            <button class="key btn btn-primary" id="v">V</button>
-            <button class="key btn btn-primary" id="w">W</button>
-            <button class="key btn btn-primary" id="x">X</button>
-            <button class="key btn btn-primary" id="y">Y</button>
-            <button class="key btn btn-primary" id="z">Z</button>        
-        </div>
-        
-    </card>
 
-    <form id="formulario" method="POST" action="{% url 'registrar' %}">
-        {% csrf_token %}
-        <input type="text" id="palabra-completa" maxlength="50" placeholder="Adivina la palabra">
-        <button type="button" id="adivinar">Adivinar</button>
-        <input type="number" id="attemps" name="attemps" hidden>        
-        <input type="number" id="is_correct" name="is_correct" hidden>
-        <input type="text" id="word" value="{{word.id}}" name="word" hidden>
-        <p id="mensaje"></p>
-        <button type="submit" id="btnVolver" hidden>volver</button>
-    </form>
+    <div class="container">
+        <div class="row align-items-start">
+            <div class="col">
+                <button id="btnPista" class="btn btn-danger mb-5">Pulse para una pista</button>
+                <p id="palabra" data-palabra="{{ word.answer }}" hidden class="mb-5">Pista: {{ word.word }}</p>
+                <p id="palabra-respuesta" style="font-size: 24px;" ></p>
+                <p>Intentos restantes: <span id="intentos">7</span></p>
+                
+                <card id="keyboard" >
+                    <div class="p-2">
+                        <button class="key btn btn-primary" id="a">A</button>
+                        <button class="key btn btn-primary" id="b">B</button>
+                        <button class="key btn btn-primary" id="c">C</button>
+                        <button class="key btn btn-primary" id="d">D</button>
+                        <button class="key btn btn-primary" id="e">E</button>
+                        <button class="key btn btn-primary" id="f">F</button>
+                        <button class="key btn btn-primary" id="g">G</button>
+                        <button class="key btn btn-primary" id="h">H</button>
+                        <button class="key btn btn-primary" id="i">I</button>
+                    </div>
+                    <div class="p-2">
+                        <button class="key btn btn-primary" id="j">J</button>
+                        <button class="key btn btn-primary" id="k">K</button>
+                        <button class="key btn btn-primary" id="l">L</button>
+                        <button class="key btn btn-primary" id="m">M</button>
+                        <button class="key btn btn-primary" id="n">N</button>
+                        <button class="key btn btn-primary" id="ñ">Ñ</button>
+                        <button class="key btn btn-primary" id="o">O</button>
+                        <button class="key btn btn-primary" id="p">P</button>
+                        <button class="key btn btn-primary" id="q">Q</button>            
+                    </div>
+                    <div class="p-2">
+                        <button class="key btn btn-primary" id="r">R</button>
+                        <button class="key btn btn-primary" id="s">S</button>
+                        <button class="key btn btn-primary" id="t">T</button>
+                        <button class="key btn btn-primary" id="u">U</button>
+                        <button class="key btn btn-primary" id="v">V</button>
+                        <button class="key btn btn-primary" id="w">W</button>
+                        <button class="key btn btn-primary" id="x">X</button>
+                        <button class="key btn btn-primary" id="y">Y</button>
+                        <button class="key btn btn-primary" id="z">Z</button>        
+                    </div>
+                    
+                </card>
+
+                <form id="formulario" method="POST" action="{% url 'registrar' %}">
+                    {% csrf_token %}
+                    <input type="text" id="palabra-completa" maxlength="50" placeholder="Adivina la palabra">
+                    <input type="number" id="attemps" name="attemps" hidden>
+                    <input type="number" id="is_correct" name="is_correct" hidden>
+                    <input type="text" id="word" value="{{word.id}}" name="word" hidden>
+                    <p id="mensaje"></p>
+                    <button type="submit" id="btnVolver" hidden>Terminar</button>
+                </form>
+                <button type="button" id="adivinar">Adivinar</button>
+            </div>
+            <div class="col">
+                <canvas id="lienzo">
+                    Tu navegador no acepta canvas
+                </canvas>
+            </div>
+        </div>
+    </div>
     
-    <script src="{% static 'javascript/juego.js' %}"></script>    
+    <script src="{% static 'javascript/juego.js' %}"></script> 
+    
 {% endblock contenido %}

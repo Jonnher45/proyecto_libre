@@ -1,63 +1,5 @@
-/*document.addEventListener("DOMContentLoaded", function() {
-    //const respuesta = "{{ word.answer}}".toLowerCase();
-    const respuesta = document.getElementById("palabra").getAttribute("data-palabra");
-    alert(respuesta);
-    // Puedes usar la variable 'palabra' en tu lógica JavaScript
-    const palabraElemento = document.getElementById("palabra-respuesta");
-    const intentosElemento = document.getElementById("intentos");
-    const letraInput = document.getElementById("letra");
-    const mensaje = document.getElementById("mensaje");
-    const adivinarBtn = document.getElementById("adivinar");
-    let intentos = 6;
-    let palabraAdivinada = new Array(respuesta.length).fill("_");
-
-    // Función para actualizar la visualización de la palabra adivinada
-    function actualizarPalabraAdivinada() {
-        palabraElemento.textContent = palabraAdivinada.join(" ");
-    }
-
-    // Función para comprobar si el jugador ganó
-    function verificarGanador() {
-        if (!palabraAdivinada.includes("_")) {
-            mensaje.textContent = "¡Ganaste! La palabra era '" + respuesta + "'.";
-            adivinarBtn.disabled = true;
-            letraInput.disabled = true;
-        }
-    }
-
-    adivinarBtn.addEventListener("click", function() {
-        const letra = letraInput.value.toLowerCase();
-        if (letra.length === 1 && /^[a-zA-Z]+$/.test(letra)) {
-            if (respuesta.includes(letra)) {
-                // Actualizar la palabra adivinada con la letra correcta en las posiciones correspondientes
-                for (let i = 0; i < respuesta.length; i++) {
-                    if (respuesta[i] === letra) {
-                        palabraAdivinada[i] = letra;
-                    }
-                }
-                actualizarPalabraAdivinada();
-                verificarGanador();
-            } else {
-                intentos--;
-                intentosElemento.textContent = intentos;
-                if (intentos === 0) {
-                    mensaje.textContent = "Perdiste. La palabra era '" + respuesta + "'.";
-                    adivinarBtn.disabled = true;
-                    letraInput.disabled = true;
-                } else {
-                    mensaje.textContent = "Letra incorrecta. Intenta de nuevo.";
-                }
-            }
-            letraInput.value = ""; // Limpiar el campo de entrada
-        } else {
-            mensaje.textContent = "Ingresa una letra válida.";
-        }
-    });
-});
-*/
 document.addEventListener("DOMContentLoaded", function() {
     const palabra = document.getElementById("palabra").getAttribute("data-palabra").toLowerCase();
-    //const palabra = "{{ palabra.respuesta }}".toLowerCase();
     const palabraElemento = document.getElementById("palabra-respuesta");
     const palabraIntento = document.getElementById("palabra-completa");
     const intentosElemento = document.getElementById("intentos");
@@ -65,13 +7,16 @@ document.addEventListener("DOMContentLoaded", function() {
     const adivinarBtn = document.getElementById("adivinar");
     const teclas = document.querySelectorAll(".key");
     const btnVolver = document.getElementById("btnVolver");
+    const btnPista = document.getElementById("btnPista"); 
+    const txtPista = document.getElementById("palabra"); 
     
 
-    let intentos = 6;
+    let intentos = 7;
     let palabraAdivinada = new Array(palabra.length).fill("_");
         
     palabraElemento.textContent = palabraAdivinada.join(" ");
 
+    dibujarPoste();
     function actualizarPalabraAdivinada() {
         palabraElemento.textContent = palabraAdivinada.join(" ");
     }
@@ -80,11 +25,16 @@ document.addEventListener("DOMContentLoaded", function() {
         btnVolver.removeAttribute("hidden");
         btnVolver.setAttribute("data-class", intentos.toString());
     }
+    function deshabilitarCuadro(){
+        adivinarBtn.setAttribute("hidden",true);
+        palabraIntento.disabled = true;
+    }
 
     function verificarGanador() {
         if (!palabraAdivinada.includes("_")) {
             mensaje.textContent = "¡Ganaste! La palabra era '" + palabra + "'.";
             deshabilitarTeclas();
+            deshabilitarCuadro();
             visualizarBoton();
             document.getElementById("attemps").setAttribute("value",(intentos));            
             document.getElementById("is_correct").setAttribute("value",1);
@@ -92,20 +42,22 @@ document.addEventListener("DOMContentLoaded", function() {
     }
     function nombrarGanador() {        
         mensaje.textContent = "¡Ganaste! La palabra era '" + palabra + "'.";            
-        adivinarBtn.disabled = true;
-        palabraIntento.disabled = true;
+        deshabilitarCuadro();
         deshabilitarTeclas();
         visualizarBoton();
         document.getElementById("attemps").setAttribute("value",(intentos));            
-            document.getElementById("is_correct").setAttribute("value",1);
+        document.getElementById("is_correct").setAttribute("value",1);
     }
 
     function verificarPerdedor() {
         if (intentos === 0) {
             mensaje.textContent = "Perdiste. La palabra era '" + palabra + "'.";
             deshabilitarTeclas();
-            document.getElementById("attemps").setAttribute("value",6);            
-            document.getElementById("is_correct").setAttribute("value",0);
+            visualizarBoton();
+            document.getElementById("attemps").setAttribute("value", 7);            
+            document.getElementById("is_correct").setAttribute("value", 0);            
+            deshabilitarCuadro();
+            dibujarMuneco();
         }
     }
 
@@ -131,11 +83,17 @@ document.addEventListener("DOMContentLoaded", function() {
                 intentos--;
                 intentosElemento.textContent = intentos;
                 verificarPerdedor();
+                dibujarMuneco();
                 this.disabled = true; // Deshabilitar la tecla seleccionada
             }
         });
     });
 
+    btnPista.addEventListener("click", function() {
+        txtPista.removeAttribute("hidden");
+        btnPista.setAttribute("hidden", "true");
+    });
+    
     adivinarBtn.addEventListener("click", function() {
         const palabraSuposicion = palabraIntento.value.toLowerCase();        
             if (palabra == palabraSuposicion) {                
@@ -148,14 +106,79 @@ document.addEventListener("DOMContentLoaded", function() {
                 intentosElemento.textContent = intentos;
                 if (intentos === 0) {
                     mensaje.textContent = "Perdiste. La palabra era '" + respuesta + "'.";
-                    adivinarBtn.disabled = true;
-                    palabraAdivinada.disabled = true;
-                    palabraIntento.disabled = true;
+                    deshabilitarCuadro();
+                    dibujarMuneco();
+                    verificarPerdedor();
                 } else {
                     mensaje.textContent = "Palabra incorrecta. Intenta de nuevo.";
+                    dibujarMuneco();
                 }
+                palabraIntento.value = ""; // Limpiar el campo de entrada
             }
-            palabraAdivinada.value = ""; // Limpiar el campo de entrada
+            
         
     });
+
+    function dibujarPoste(){
+        var canvas = document.getElementById("lienzo");
+        if (canvas.getContext){
+            var ctx = canvas.getContext("2d");
+            
+        }
+    }
+
+    function dibujarMuneco(){
+        var canvas = document.getElementById("lienzo");
+        if (canvas.getContext){
+            var ctx = canvas.getContext("2d");
+
+            switch (intentos) {
+                case 6:
+                    ctx.beginPath();
+                    ctx.moveTo(30,200);
+                    ctx.lineTo(30,5);
+                    ctx.lineTo(150,5);
+                    ctx.lineTo(150,20);
+                    ctx.stroke();
+                    break;
+                case 5:
+                    ctx.beginPath();
+                    ctx.arc(150, 40 , 20, 0, Math.PI * 2);
+                    ctx.stroke();
+                    break;
+                case 4:
+                    ctx.beginPath();
+                    ctx.moveTo(150,60);
+                    ctx.lineTo(150,100);
+                    ctx.stroke();
+                    break;
+                case 3:
+                    ctx.beginPath();
+                    ctx.moveTo(150,60);
+                    ctx.lineTo(130,100);
+                    ctx.stroke();
+                    break;
+                case 2:
+                    ctx.beginPath();
+                    ctx.moveTo(150,60);
+                    ctx.lineTo(170,100);
+                    ctx.stroke();
+                    break;
+                case 1:
+                    ctx.beginPath();
+                    ctx.moveTo(150,100);
+                    ctx.lineTo(130,130);
+                    ctx.stroke();
+                    break;
+                case 0:
+                    ctx.beginPath();
+                    ctx.moveTo(150,100);
+                    ctx.lineTo(170,130);
+                    ctx.stroke();
+                    break;
+                default:
+                  console.log("Fin del juego");
+              }                       
+        }
+    }
 });

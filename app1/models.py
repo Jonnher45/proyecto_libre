@@ -14,7 +14,7 @@ class Word(models.Model):
     level = models.ForeignKey(Level, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.word
+        return self.answer
     
 
 
@@ -22,6 +22,7 @@ class Attemp(models.Model):
     word = models.ForeignKey(Word, on_delete=models.CASCADE)
     attemps = models.IntegerField(default=0)
     is_correct = models.BooleanField(default=False)
+    score = models.IntegerField(default=0)
     
     def __str__(self):
         return str(self.created_date)

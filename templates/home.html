@@ -4,7 +4,7 @@
 
     <h1>Juego del Ahorcado</h1>    
     {% block game %}    
-        <div class="dropdown">
+        <div class="dropdown py-3">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dificultadDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                 Seleccionar Dificultad
             </button>
@@ -20,24 +20,28 @@
             <table class="table">
                 <thead>
                   <tr>
-                    <th scope="col">ID</th>
+                    <th scope="col">#</th>
+                    <th scope="col">ID Juego</th>
                     <th scope="col">Nivel de la palabra</th>
                     <th scope="col">Intentos Restantes</th>
                     <th scope="col">Es Correcta</th>
+                    <th scope="col">Score</th>
                   </tr>
                 </thead>
                 <tbody> 
                     {% for attemp in attemps %}
                     <tr>
-                        <th scope="row">{{attemp.id}}</th>
+                        <th scope="row">{{forloop.counter}}</th>
+                        <td>{{attemp.id}}</td>
                         <td>{{attemp.word.level.name}}</td>
-                        <td>{{attemp.attemps}}/6</td>                          
+                        <td>{{attemp.attemps}}/7</td>                          
                         <td>{% if attemp.is_correct == 1 %}
                             Si
                             {% else %}
                             No
                             {% endif %}
-                        </td>                        
+                        </td>  
+                        <td>{{attemp.score}}</td>                      
                     </tr>
                     {% endfor %}                         
                   

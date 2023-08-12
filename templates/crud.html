@@ -1,0 +1,112 @@
+{% extends 'home.html' %} {% block contenido %}
+<div class="container">
+  <div class="row align-items-start">
+    <div class="col">
+      <form action="{% url 'crearPalabra' %}" method="POST">
+        {% csrf_token %}
+        <h3><strong>Formulario de Registro</strong></h3>
+        <div class="form-group pb-2">
+          <label for="txtAnswer" class="mb-1">Ingrese una palabra:</label>
+          <input type="text" id="txtAnswer" name="txtAnswer" class="form-control" placeholder="Palabra" maxlength="50" required />
+        </div>
+        <div class="form-group pb-2">
+          <label for="txtWord" class="mb-1">Ingrese una pista:</label>
+          <input type="text" id="txtWord" name="txtWord" class="form-control" placeholder="Pista" maxlength="50" required />
+        </div>
+        <label for="flexRadioDefault"
+          ><strong>Seleccione la dificultad</strong></label
+        >
+        {% for nivel in niveles %}
+        <div class="form-check ml-5">
+          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault{{nivel.id}}" value="{{nivel.id}}" required data-max-questions="{{ nivel.question_set.count }}"/>
+          <label class="form-check-label" for="flexRadioDefault{{nivel.id}}">
+            {{nivel.name}}
+          </label>
+        </div>
+        {% endfor %}
+        <div class="form-group">
+          <button type="submit" class="btn btn-success btn-block text-white">
+            Guardar
+          </button>
+        </div>
+      </form>
+    </div>
+    <div class="col">
+      <div class="card" style="width: 35rem">
+        <p class="my-3 ps-2"><strong>Base de Datos - Palabras</strong></p>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">ID</th>
+              <th scope="col">Palabra</th>
+              <th scope="col">Pista</th>
+              <th scope="col">Nivel</th>
+              <th colspan="2">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for palabra in palabras %}
+            <tr>
+              <th scope="row">{{forloop.counter}}</th>
+              <td>{{palabra.id}}</td>
+              <td>{{palabra.answer}}</td>
+              <td>{{palabra.word}}</td>
+              <td>{{palabra.level.name}}</td>
+              <td>
+                <a href="{% url 'edicionPalabra' palabra.id %}" class="btn btn-info" >Editar</a>
+              </td>
+              <td>
+                <a href="#" data-id="{{palabra.id}}" data-word="{{palabra.answer}}" class="btn btn-danger btnEliminar" data-bs-toggle="modal" data-bs-target="#exampleModal">Eliminar</a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <ul class="list-group list-group-flush"></ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel{{palabra.id}}">Eliminar Palabra</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
+      </div>
+      <div class="modal-body">
+        <p id="texto-modal"></p>
+      </div>
+      <div class="modal-footer">
+        <a id="btnEnlace" type="button" class="btn btn-danger">Eliminar Palabra</a>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const btnEliminar = document.querySelectorAll(".btnEliminar");
+  const btnEnlace = document.getElementById("btnEnlace");
+  const pModal = document.getElementById("texto-modal");
+  btnEliminar.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      const confirmacion = btn.getAttribute("data-id");
+      const palabra = btn.getAttribute("data-word");
+      const url = `/eliminarPalabra/${confirmacion}`;
+      btnEnlace.href = url;
+      pModal.innerHTML = `¿Está seguro de eliminar la palabra <strong>${palabra}</strong>? <br> Se eliminarán todos los registros con esa palabra.`;
+      e.preventDefault();
+    });
+  });
+</script>
+
+{% endblock contenido %}

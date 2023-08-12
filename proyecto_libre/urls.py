@@ -23,6 +23,10 @@ urlpatterns = [
     path('',views.home,name="home"),
     path('game/<int:id>',views.game,name="game"),
     path('registrar',views.registrar,name="registrar"),
-    
+    path('crud/',views.crud,name="crud"),
+    path('crearPalabra/',views.crearPalabra,name="crearPalabra"),
+    path('editarPalabra/',views.editarPalabra,name="editarPalabra"),
+    path('edicionPalabra/<int:id>',views.edicionPalabra,name="edicionPalabra"),
+    path('eliminarPalabra/<int:id>',views.eliminarPalabra,name="eliminarPalabra"),
 ]
 

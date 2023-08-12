@@ -48,14 +48,14 @@
                 </card>
 
                 <form id="formulario" method="POST" action="{% url 'registrar' %}">
-                    {% csrf_token %}
-                    <input type="text" id="palabra-completa" maxlength="50" placeholder="Adivina la palabra">
+                    {% csrf_token %}                    
                     <input type="number" id="attemps" name="attemps" hidden>
                     <input type="number" id="is_correct" name="is_correct" hidden>
                     <input type="text" id="word" value="{{word.id}}" name="word" hidden>
                     <p id="mensaje"></p>
-                    <button type="submit" id="btnVolver" hidden>Terminar</button>
+                    <button type="submit" id="btnVolver" class="btn btn-primary my-3" hidden>Terminar</button>
                 </form>
+                <input type="text" id="palabra-completa" maxlength="50" placeholder="Adivina la palabra">
                 <button type="button" id="adivinar">Adivinar</button>
             </div>
             <div class="col">

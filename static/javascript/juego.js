@@ -8,15 +8,13 @@ document.addEventListener("DOMContentLoaded", function() {
     const teclas = document.querySelectorAll(".key");
     const btnVolver = document.getElementById("btnVolver");
     const btnPista = document.getElementById("btnPista"); 
-    const txtPista = document.getElementById("palabra"); 
-    
+    const txtPista = document.getElementById("palabra");         
 
     let intentos = 7;
     let palabraAdivinada = new Array(palabra.length).fill("_");
         
     palabraElemento.textContent = palabraAdivinada.join(" ");
-
-    dibujarPoste();
+    
     function actualizarPalabraAdivinada() {
         palabraElemento.textContent = palabraAdivinada.join(" ");
     }
@@ -27,6 +25,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
     function deshabilitarCuadro(){
         adivinarBtn.setAttribute("hidden",true);
+        palabraIntento.setAttribute("hidden",true);
         palabraIntento.disabled = true;
     }
 
@@ -95,6 +94,17 @@ document.addEventListener("DOMContentLoaded", function() {
     });
     
     adivinarBtn.addEventListener("click", function() {
+        validar();
+    });
+
+    palabraIntento.addEventListener("keydown", function(e) {
+        if (e.key === "Enter") {
+          e.preventDefault();    
+          validar();                
+        }
+      });
+
+    function validar(){
         const palabraSuposicion = palabraIntento.value.toLowerCase();        
             if (palabra == palabraSuposicion) {                
                 // Actualizar la palabra adivinada con la letra correcta en las posiciones correspondientes
@@ -114,18 +124,10 @@ document.addEventListener("DOMContentLoaded", function() {
                     dibujarMuneco();
                 }
                 palabraIntento.value = ""; // Limpiar el campo de entrada
-            }
-            
-        
-    });
-
-    function dibujarPoste(){
-        var canvas = document.getElementById("lienzo");
-        if (canvas.getContext){
-            var ctx = canvas.getContext("2d");
-            
-        }
+            }                
     }
+
+    
 
     function dibujarMuneco(){
         var canvas = document.getElementById("lienzo");
